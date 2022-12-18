@@ -1,9 +1,4 @@
-import {
-  applyMiddleware,
-  combineReducers,
-  configureStore,
-} from "@reduxjs/toolkit";
-import thunk from "react-redux";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({});
 
