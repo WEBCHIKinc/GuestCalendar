@@ -1,3 +1,5 @@
+import axios from "axios";
+import { AppDispatch } from "../..";
 import { IUser } from "../../../models/IUser";
 import {
   AuthActionEnum,
@@ -6,6 +8,7 @@ import {
   SetIsLoadingAction,
   SetUserAction,
 } from "./types";
+import userEvent from "@testing-library/user-event";
 
 export const AuthActionCreators = {
   setUser: (user: IUser): SetUserAction => ({
@@ -24,4 +27,26 @@ export const AuthActionCreators = {
     type: AuthActionEnum.SET_AUTH,
     payload: auth,
   }),
+  login:
+    (username: string, password: string) => async (dispatch: AppDispatch) => {
+      try {
+        dispatch(AuthActionCreators.setIsLoading(true));
+        const response = await axios.get<IUser[]>("./users.json");
+        const mockUser = response.data.find(
+          (user) => user.username === username && user.password === password
+        );
+        if (mockUser) {
+          dispatch(AuthActionCreators.setIsAuth(true));
+          dispatch(AuthActionCreators.setUser(mockUser));
+          localStorage.setItem("auth", "true");
+          localStorage.setItem("username", mockUser.username);
+        } else {
+          dispatch(AuthActionCreators.setError("incorrect login or password"));
+        }
+        dispatch(AuthActionCreators.setIsLoading(false));
+      } catch (error) {
+        dispatch(AuthActionCreators.setError("login error"));
+      }
+    },
+  logout: () => async (dispatch: AppDispatch) => {},
 };

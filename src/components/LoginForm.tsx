@@ -1,14 +1,13 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import React, { FC } from "react";
 import { rules } from "../utils/rules";
+import { AuthActionCreators } from "../store/redusers/auth/action-creators";
+import { useTypedDispatch } from "../hooks/useTypedSelector";
 
 const LoginForm: FC = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const dispatch = useTypedDispatch();
+  const submit = () => {
+    dispatch(AuthActionCreators.login("user1", "123"));
   };
 
   return (
@@ -17,8 +16,7 @@ const LoginForm: FC = () => {
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+      onFinish={submit}
       autoComplete="off"
     >
       <Form.Item
