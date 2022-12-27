@@ -4,18 +4,16 @@ import { Header } from "antd/es/layout/layout";
 import { MenuProps } from "antd/es/menu";
 import { useTypedDispatch, useTypedSelector } from "../hooks/useTypedSelector";
 import { AuthActionCreators } from "../store/redusers/auth/action-creators";
+import { useActions } from "../hooks/useActions";
 
 const Navbar = () => {
-  const { isAuth } = useTypedSelector((state) => state.auth);
-  const { user } = useTypedSelector((state) => state.auth);
-  const dispatch = useTypedDispatch();
+  const { isAuth, user } = useTypedSelector((state) => state.auth);
+  const { logout } = useActions();
   const authItems: MenuProps["items"] = [
     {
       label: "exit",
       key: "exit",
-      onClick: (e) => {
-        dispatch(AuthActionCreators.logout());
-      },
+      onClick: logout,
     },
   ];
   const guestItems: MenuProps["items"] = [

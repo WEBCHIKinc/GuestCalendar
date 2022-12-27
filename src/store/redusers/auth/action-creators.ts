@@ -8,7 +8,6 @@ import {
   SetIsLoadingAction,
   SetUserAction,
 } from "./types";
-import userEvent from "@testing-library/user-event";
 
 export const AuthActionCreators = {
   setUser: (user: IUser): SetUserAction => ({
