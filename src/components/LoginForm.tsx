@@ -1,13 +1,16 @@
 import { Button, Checkbox, Form, Input } from "antd";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { rules } from "../utils/rules";
 import { AuthActionCreators } from "../store/redusers/auth/action-creators";
-import { useTypedDispatch } from "../hooks/useTypedSelector";
+import { useTypedDispatch, useTypedSelector } from "../hooks/useTypedSelector";
 
 const LoginForm: FC = () => {
   const dispatch = useTypedDispatch();
+  const { error, isLoading } = useTypedSelector((state) => state.auth);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const submit = () => {
-    dispatch(AuthActionCreators.login("user1", "123"));
+    dispatch(AuthActionCreators.login(username, password));
   };
 
   return (
@@ -19,12 +22,13 @@ const LoginForm: FC = () => {
       onFinish={submit}
       autoComplete="off"
     >
+      {error && <div style={{ color: "red" }}> {error} </div>}
       <Form.Item
         label="Username"
         name="username"
         rules={[rules.required("Please input your username!")]}
       >
-        <Input />
+        <Input value={username} onChange={(e) => setUsername(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -32,7 +36,10 @@ const LoginForm: FC = () => {
         name="password"
         rules={[rules.required("Please input your password!")]}
       >
-        <Input.Password />
+        <Input.Password
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </Form.Item>
 
       <Form.Item
@@ -44,7 +51,7 @@ const LoginForm: FC = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isLoading}>
           Submit
         </Button>
       </Form.Item>

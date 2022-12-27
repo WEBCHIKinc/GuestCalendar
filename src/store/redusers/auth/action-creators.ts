@@ -48,5 +48,10 @@ export const AuthActionCreators = {
         dispatch(AuthActionCreators.setError("login error"));
       }
     },
-  logout: () => async (dispatch: AppDispatch) => {},
+  logout: () => async (dispatch: AppDispatch) => {
+    localStorage.removeItem("auth");
+    localStorage.removeItem("username");
+    dispatch(AuthActionCreators.setIsAuth(false));
+    dispatch(AuthActionCreators.setUser({} as IUser));
+  },
 };

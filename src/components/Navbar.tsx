@@ -2,34 +2,23 @@ import { Menu } from "antd";
 import { Row } from "antd/es/grid";
 import { Header } from "antd/es/layout/layout";
 import { MenuProps } from "antd/es/menu";
-import { useTypedSelector } from "../hooks/useTypedSelector";
+import { useTypedDispatch, useTypedSelector } from "../hooks/useTypedSelector";
+import { AuthActionCreators } from "../store/redusers/auth/action-creators";
 
 const Navbar = () => {
   const { isAuth } = useTypedSelector((state) => state.auth);
+  const { user } = useTypedSelector((state) => state.auth);
+  const dispatch = useTypedDispatch();
   const authItems: MenuProps["items"] = [
     {
-      label: "name",
-      key: "name",
+      label: "exit",
+      key: "exit",
       onClick: (e) => {
-        console.log("name");
-      },
-    },
-    {
-      label: "logout",
-      key: "logout",
-      onClick: (e) => {
-        console.log("logout");
+        dispatch(AuthActionCreators.logout());
       },
     },
   ];
   const guestItems: MenuProps["items"] = [
-    {
-      label: "name",
-      key: "name",
-      onClick: (e) => {
-        console.log("name");
-      },
-    },
     {
       label: "login",
       key: "login",
@@ -39,28 +28,29 @@ const Navbar = () => {
     },
   ];
 
-  return isAuth ? (
+  return (
     <Header style={{ color: "white", background: "#434343" }}>
       <Row justify={"end"}>
-        <Menu
-          style={{ background: "#434343" }}
-          theme="dark"
-          mode="horizontal"
-          selectable={false}
-          items={authItems}
-        ></Menu>
-      </Row>
-    </Header>
-  ) : (
-    <Header style={{ color: "white", background: "#434343" }}>
-      <Row justify={"end"}>
-        <Menu
-          style={{ background: "#434343" }}
-          theme="dark"
-          mode="horizontal"
-          selectable={false}
-          items={guestItems}
-        ></Menu>
+        {isAuth ? (
+          <>
+            <div>{user.username}</div>
+            <Menu
+              style={{ background: "#434343" }}
+              theme="dark"
+              mode="horizontal"
+              selectable={false}
+              items={authItems}
+            ></Menu>
+          </>
+        ) : (
+          <Menu
+            style={{ background: "#434343" }}
+            theme="dark"
+            mode="horizontal"
+            selectable={false}
+            items={guestItems}
+          ></Menu>
+        )}
       </Row>
     </Header>
   );
