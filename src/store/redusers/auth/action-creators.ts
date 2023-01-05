@@ -1,4 +1,3 @@
-import axios from "axios";
 import { AppDispatch } from "../..";
 import { IUser } from "../../../models/IUser";
 import {
@@ -8,6 +7,7 @@ import {
   SetIsLoadingAction,
   SetUserAction,
 } from "./types";
+import UserSevice from "../../../api/UserService";
 
 export const AuthActionCreators = {
   setUser: (user: IUser): SetUserAction => ({
@@ -30,7 +30,7 @@ export const AuthActionCreators = {
     (username: string, password: string) => async (dispatch: AppDispatch) => {
       try {
         dispatch(AuthActionCreators.setIsLoading(true));
-        const response = await axios.get<IUser[]>("./users.json");
+        const response = await UserSevice.getUsers();
         const mockUser = response.data.find(
           (user) => user.username === username && user.password === password
         );
