@@ -1,8 +1,7 @@
 import { Button, Checkbox, Form, Input } from "antd";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { rules } from "../utils/rules";
-import { AuthActionCreators } from "../store/redusers/auth/action-creators";
-import { useTypedDispatch, useTypedSelector } from "../hooks/useTypedSelector";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 
 const LoginForm: FC = () => {
@@ -16,14 +15,7 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={submit}
-      autoComplete="off"
-    >
+    <Form onFinish={submit}>
       {error && <div style={{ color: "red" }}> {error} </div>}
       <Form.Item
         label="Username"

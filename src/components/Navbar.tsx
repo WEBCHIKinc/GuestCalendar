@@ -2,8 +2,7 @@ import { Menu } from "antd";
 import { Row } from "antd/es/grid";
 import { Header } from "antd/es/layout/layout";
 import { MenuProps } from "antd/es/menu";
-import { useTypedDispatch, useTypedSelector } from "../hooks/useTypedSelector";
-import { AuthActionCreators } from "../store/redusers/auth/action-creators";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 
 const Navbar = () => {
