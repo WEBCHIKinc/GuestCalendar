@@ -6,7 +6,7 @@ interface EventCalendarProps {
   events: IEvent;
 }
 
-const EventCalendar: FC<EventCalendarProps> = () => {
+const EventCalendar: FC = () => {
   return <Calendar />;
 };
 

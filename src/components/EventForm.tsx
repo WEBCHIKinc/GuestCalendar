@@ -1,28 +1,28 @@
 import { Button, DatePicker, Form, Input, Row, Select } from "antd";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { rules } from "../utils/rules";
 import FormItem from "antd/es/form/FormItem";
+import { IUser } from "../models/IUser";
+import { IEvent } from "../models/IEvent";
 
-const EventForm: FC = () => {
-  const options = [
-    {
-      value: "jack",
-      label: "Jack",
-    },
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "disabled",
-      disabled: true,
-      label: "Disabled",
-    },
-    {
-      value: "Yiminghe",
-      label: "yiminghe",
-    },
-  ];
+interface EventFormProps {
+  guests: IUser[];
+}
+
+const EventForm: FC<EventFormProps> = (props) => {
+  const [event, setEvent] = useState<IEvent>({
+    author: "",
+    description: "",
+    guest: "",
+    date: "",
+  } as IEvent);
+
+  const handleSelectChange = (guest: string) => {
+    setEvent({ ...event, guest });
+  };
+  const handleInputChange = (e: any) => {
+    setEvent({ ...event, description: e.target.value });
+  };
 
   return (
     <Form>
@@ -31,18 +31,23 @@ const EventForm: FC = () => {
         name="description"
         rules={[rules.required()]}
       >
-        <Input autoComplete="off" />
+        <Input
+          autoComplete="off"
+          value={event.description}
+          onChange={handleInputChange}
+        />
       </Form.Item>
       <Form.Item label="Date" name="date" rules={[rules.required()]}>
         <DatePicker />
       </Form.Item>
-      <FormItem>
-        <Select
-          defaultValue="lucy"
-          style={{ width: 120 }}
-          // onChange={handleChange}
-          options={options}
-        />
+      <FormItem label="Guest" name="guest">
+        <Select style={{ width: 120 }} onChange={handleSelectChange}>
+          {props.guests.map((guest) => (
+            <Select.Option key={guest.username} value={guest.username}>
+              {guest.username}
+            </Select.Option>
+          ))}
+        </Select>
       </FormItem>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Row justify={"end"}>

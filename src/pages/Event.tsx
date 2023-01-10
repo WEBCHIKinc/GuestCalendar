@@ -1,10 +1,18 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import EventCalendar from "../components/EventCalendar";
 import { Button, Layout, Modal, Row } from "antd";
 import EventForm from "../components/EventForm";
+import { useActions } from "../hooks/useActions";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 
 const Event: FC = () => {
+  const { guests } = useTypedSelector((state) => state.event);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { fetchGuests } = useActions();
+
+  useEffect(() => {
+    fetchGuests();
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -15,7 +23,7 @@ const Event: FC = () => {
 
   return (
     <Layout>
-      <EventCalendar events={[]} />
+      <EventCalendar />
       <Row justify={"center"}>
         <Button onClick={showModal}>Create event</Button>
       </Row>
@@ -25,7 +33,7 @@ const Event: FC = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <EventForm />
+        <EventForm guests={guests} />
       </Modal>
     </Layout>
   );
