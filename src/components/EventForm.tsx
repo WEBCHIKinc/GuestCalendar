@@ -4,9 +4,11 @@ import { rules } from "../utils/rules";
 import FormItem from "antd/es/form/FormItem";
 import { IUser } from "../models/IUser";
 import { IEvent } from "../models/IEvent";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 
 interface EventFormProps {
   guests: IUser[];
+  submit: (event: IEvent) => void;
 }
 
 const EventForm: FC<EventFormProps> = (props) => {
@@ -16,16 +18,26 @@ const EventForm: FC<EventFormProps> = (props) => {
     guest: "",
     date: "",
   } as IEvent);
+  const { user } = useTypedSelector((state) => state.auth);
 
   const handleSelectChange = (guest: string) => {
     setEvent({ ...event, guest });
   };
+
   const handleInputChange = (e: any) => {
     setEvent({ ...event, description: e.target.value });
   };
 
+  const selectDate = (_: any, dateString: any) => {
+    setEvent({ ...event, date: dateString });
+  };
+
+  const submitForm = () => {
+    props.submit({ ...event, author: user.username });
+  };
+
   return (
-    <Form>
+    <Form onFinish={submitForm}>
       <Form.Item
         label="Event description"
         name="description"
@@ -38,7 +50,7 @@ const EventForm: FC<EventFormProps> = (props) => {
         />
       </Form.Item>
       <Form.Item label="Date" name="date" rules={[rules.required()]}>
-        <DatePicker />
+        <DatePicker onChange={selectDate} />
       </Form.Item>
       <FormItem label="Guest" name="guest">
         <Select style={{ width: 120 }} onChange={handleSelectChange}>

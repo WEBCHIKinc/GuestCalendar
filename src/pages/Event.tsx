@@ -6,9 +6,9 @@ import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 
 const Event: FC = () => {
-  const { guests } = useTypedSelector((state) => state.event);
+  const { guests, events } = useTypedSelector((state) => state.event);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { fetchGuests } = useActions();
+  const { fetchGuests, createEvent } = useActions();
 
   useEffect(() => {
     fetchGuests();
@@ -23,6 +23,7 @@ const Event: FC = () => {
 
   return (
     <Layout>
+      {JSON.stringify(events)}
       <EventCalendar />
       <Row justify={"center"}>
         <Button onClick={showModal}>Create event</Button>
@@ -33,7 +34,7 @@ const Event: FC = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <EventForm guests={guests} />
+        <EventForm guests={guests} submit={(event) => createEvent(event)} />
       </Modal>
     </Layout>
   );
