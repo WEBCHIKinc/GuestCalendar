@@ -5,6 +5,7 @@ import FormItem from "antd/es/form/FormItem";
 import { IUser } from "../models/IUser";
 import { IEvent } from "../models/IEvent";
 import { useTypedSelector } from "../hooks/useTypedSelector";
+import { Dayjs } from "dayjs";
 
 interface EventFormProps {
   guests: IUser[];
@@ -16,9 +17,10 @@ const EventForm: FC<EventFormProps> = (props) => {
     author: "",
     description: "",
     guest: "",
-    date: "",
+    date: { day: 0, month: 0 },
   } as IEvent);
   const { user } = useTypedSelector((state) => state.auth);
+  const [date, setDate] = useState({} as Dayjs);
 
   const handleSelectChange = (guest: string) => {
     setEvent({ ...event, guest });
@@ -28,8 +30,13 @@ const EventForm: FC<EventFormProps> = (props) => {
     setEvent({ ...event, description: e.target.value });
   };
 
-  const selectDate = (_: any, dateString: any) => {
-    setEvent({ ...event, date: dateString });
+  const selectDate = (date: Dayjs | null, dateString: string) => {
+    date
+      ? setEvent({
+          ...event,
+          date: { day: date.date(), month: date.month(), year: date.year() },
+        })
+      : console.log("wrong date");
   };
 
   const submitForm = () => {
@@ -49,7 +56,11 @@ const EventForm: FC<EventFormProps> = (props) => {
           onChange={handleInputChange}
         />
       </Form.Item>
-      <Form.Item label="Date" name="date" rules={[rules.required()]}>
+      <Form.Item
+        label="Date"
+        name="date"
+        rules={[rules.required(), rules.isDateInPast("Date is in past!")]}
+      >
         <DatePicker onChange={selectDate} />
       </Form.Item>
       <FormItem label="Guest" name="guest">

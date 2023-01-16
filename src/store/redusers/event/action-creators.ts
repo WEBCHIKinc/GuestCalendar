@@ -13,6 +13,18 @@ export const EventActionCreators = {
     type: EventActionEnum.SET_GUESTS,
     payload: guests,
   }),
+  fetchEvents: (username: string) => async (dispatch: AppDispatch) => {
+    try {
+      const events = localStorage.getItem("events") || "[]";
+      const json = JSON.parse(events) as IEvent[];
+      const currentUserEvents = json.filter(
+        (event) => event.author === username || event.guest === username
+      );
+      dispatch(EventActionCreators.setEvents(currentUserEvents));
+    } catch (error) {
+      console.log(error);
+    }
+  },
   fetchGuests: () => async (dispatch: AppDispatch) => {
     try {
       const response = await UserSevice.getUsers();

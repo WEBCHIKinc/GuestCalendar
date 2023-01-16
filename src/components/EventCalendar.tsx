@@ -18,7 +18,9 @@ const EventCalendar: FC<EventCalendarProps> = (props) => {
     return (
       <div>
         {currentDayEvents.map((ev, index) => (
-          <div key={index}>{ev.description}</div>
+          <div key={index}>
+            {ev.description} {ev.guest}
+          </div>
         ))}
       </div>
     );
